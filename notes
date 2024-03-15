@@ -1,0 +1,38 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    notes                                              :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/03/15 13:37:40 by tabadawi          #+#    #+#              #
+#    Updated: 2024/03/15 14:29:23 by tabadawi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+*mlx!!
+
+for compiling object files:
+%.o: %.c
+	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+and for our makefile we need (to link with the required internal macOS api)
+$(NAME): $(OBJ)
+	$(CC) $(OBJ) -Lmlx -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+need the libmlx.dylib in the same directory as your build target
+as it is a dynamic library
+
+functions of mlx:
+
+- mlx_init() : establish connection to the correct graphical system and
+				return void	*, which holds the location of our current mlx instance,
+				we also use this pointer in the functions bcz it represents the connection
+				to the x server, so in a way, mlx is used in a way for minilibx functions to
+				know which window we are talking about, so in a way, its the env
+
+- mlx_new_window(env, width, height, title) : creates a window and returns a void * to the pointer
+											we created
+
+- mlx_loop(env) : the main event loop, keeps everything related to the env happening, only ends when
+					terminated
+
+- 
