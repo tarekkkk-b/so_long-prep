@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:25:47 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/17 02:04:28 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/03/17 16:57:40 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,34 @@ static int	line_count(char	*path)
 	char	*line;
 	int		i;
 	int		fd;
-	int		lastnotempty;
-	int		lastopp = -1;
-
-	lastnotempty = -1;
+	int		check;
+	int		emptyline;
+	
+	emptyline = -1;
+	check = -1;
 	i = 0;
 	fd = open(path, O_RDONLY);
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		if (line[0] == '\0' || line[0] == '\n')
-			lastnotempty = i;
-		else
-			lastopp = i;
 		i++;
+		if (line[0] == '\n' && line[1] == '\0')
+			emptyline = 1;
+		if (line[0] != '\n' && line[1] != '\0' && emptyline == 1)
+		{
+			printf("middle line found\n");
+			free (line);
+			close (fd);
+			exit (1);
+		}
+		else if (line[0] != '\n' && line[1] != '\0')
+			check = i;
 		free (line);
 		line = get_next_line(fd);
 	}
-	if (lastnotempty != -1 && lastnotempty < lastopp)
-	{
-		free (line);
-		printf("lines found in the middle\n");
-		exit(1);
-	}
-	// else if (lastopp != -1 && lastopp < lastnotempty)
-	// 	printf("lines found at the end\n\n");
 	free (line);
 	close(fd);
-	// printf("%d\n", lastnotempty + 1);
-	// printf("%d\n", lastopp + 1);
-	return (lastopp + 1);
+	return (check);
 }
 
 static void	freeer(char **map)
@@ -64,8 +62,29 @@ static void	freeer(char **map)
 	}
 	free (map);
 }
+static int	check_size(char **map, int lines)
+{
+	int	i = 0;
+	int length;
+	int temp;
 
-static int	parse_map(char *path)
+	length = ft_strlen(map[i], 1);
+	if (lines < 3 || length < 3)
+		return (-1);
+	i++;
+	while (map[i])
+	{
+		temp = ft_strlen(map[i], 1);
+		if (temp != length)
+			return (-1);
+		i++;	
+	}
+	if (length * lines < 15)
+		return (-1);
+	return (0);
+}
+
+static int	get_map(char *path)
 {
 	char	**map;
 	int		i;
@@ -74,9 +93,7 @@ static int	parse_map(char *path)
 	
 	i = 0;
 	lines = line_count(path);
-	printf("%d\n", lines);
 	fd = open(path, O_RDONLY);
-	// printf("%d\n\n\n", fd);
 	map = malloc (sizeof(char *) * (lines + 1));
 	while (i < lines)
 	{
@@ -84,13 +101,15 @@ static int	parse_map(char *path)
 		i++;
 	}
 	map[i] = NULL;
-	freeer(map);
-	return (0);
+	if (check_size(map, lines) == -1)
+		return (freeer(map), 0);
+	return (1);
 }
+
 
 int	main(int ac, char **av)
 {
-	if (parse_map(av[1]) == 0)
+	if (get_map(av[1]) == 1)
 		write (1, "parsed\n", 7);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 14:56:18 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/16 13:24:48 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/03/17 16:38:58 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <limits.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1024
+#  define BUFFER_SIZE 1
 # endif
 
 typedef struct s_list
@@ -52,7 +52,7 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlcat(char *dest, const char *src, size_t size);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-size_t	ft_strlen(const char *str);
+size_t	ft_strlen(const char *str, int flag);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strnstr(const char *hay, const char *needle, size_t len);
 char	*ft_strrchr(const char *s, int c);

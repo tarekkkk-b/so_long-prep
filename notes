@@ -35,4 +35,14 @@ functions of mlx:
 - mlx_loop(env) : the main event loop, keeps everything related to the env happening, only ends when
 					terminated
 
-- 
+
+
+
+*process
+
+- map parsing: this will be our first step in the process, insuring the map is valid by checking the following:-
+	1- map doesnt have empty lines in the middle
+	2- map size is valid
+	3- map is closed
+	4- map has collectibles, player, exit
+	5- valid path
