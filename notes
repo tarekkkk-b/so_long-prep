@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 13:37:40 by tabadawi          #+#    #+#              #
-#    Updated: 2024/03/15 14:29:23 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/03/18 16:59:52 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,17 +32,15 @@ functions of mlx:
 - mlx_new_window(env, width, height, title) : creates a window and returns a void * to the pointer
 											we created
 
-- mlx_loop(env) : the main event loop, keeps everything related to the env happening, only ends when
-					terminated
-
-
+- mlx_loop(env) : the main event loop, keeps everything related to the env happening, only ends when terminated
 
 
 *process
 
 - map parsing: this will be our first step in the process, insuring the map is valid by checking the following:-
-	1- map doesnt have empty lines in the middle
-	2- map size is valid
-	3- map is closed
-	4- map has collectibles, player, exit
+	0- map has correct extention (DONE)
+	1- map doesnt have empty lines in the middle (DONE)
+	2- map size is valid (DONE)
+	3- map is closed (DONE)
+	4- map has collectibles, player, exit (DONE)
 	5- valid path
