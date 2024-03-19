@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 11:21:08 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/17 16:42:09 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:17:22 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static char	*ft_save(char *save)
 		free(save);
 		return (NULL);
 	}
-	buff = malloc ((sizeof(char)) * ft_strlen(save, 0) - i + 1);
+	buff = malloc ((sizeof(char)) * ft_strlen(save) - i + 1);
 	if (!buff)
 		return (NULL);
 	i++;
@@ -76,7 +76,7 @@ static char	*gnl_strjoin(char *sv, char *buff)
 	i = 0;
 	if (!sv && !buff)
 		return (NULL);
-	newsave = malloc(sizeof(char) * ((ft_strlen(sv, 0) + ft_strlen(buff, 0)) + 1));
+	newsave = malloc(sizeof(char) * ((ft_strlen(sv) + ft_strlen(buff)) + 1));
 	if (!newsave)
 		return (NULL);
 	while (sv && sv[i] != '\0')

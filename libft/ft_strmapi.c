@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 22:23:38 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/17 16:41:04 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:17:56 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	if (!s || !f)
 		return (NULL);
 	i = 0;
-	len = ft_strlen(s, 0);
+	len = ft_strlen(s);
 	new = (char *)malloc(len + 1);
 	if (!new)
 		return (NULL);

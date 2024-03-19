@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:25:47 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/18 16:59:03 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/19 16:10:52 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@
 # define COIN				'C'
 # define PLAYER				'P'
 # define EXIT				'E'
+
+typedef	struct s_position
+{
+	int	x;
+	int	y;
+}	t_position;
+
+typedef struct s_elements
+{
+	int	p;
+	int	c;
+	int	e;
+}	t_elements;
+
 
 static int	line_count(char	*path)
 {
@@ -76,13 +90,13 @@ static int	check_size(char **map, int lines)
 	int length;
 	int temp;
 
-	length = ft_strlen(map[i], 1);
+	length = ft_strlen(map[i]);
 	if (lines < 3 || length < 3)
 		return (-1);
 	i++;
 	while (map[i])
 	{
-		temp = ft_strlen(map[i], 1);
+		temp = ft_strlen(map[i]);
 		if (temp != length)
 			return (-1);
 		i++;	
@@ -98,11 +112,11 @@ static int	check_name(char *path)
 	int		len;
 	char	*temp = malloc(5);
 
-	len = ft_strlen(path, 0) - 4;
+	len = ft_strlen(path) - 4;
 	while (path[len])
 		temp[i++] = path[len++];
 	temp[i++] = '\0';
-	len = ft_strlen(path, 0) - 4;
+	len = ft_strlen(path) - 4;
 	if (ft_strncmp(temp, ".ber", 4) != 0)
 	{
 		free (temp);
@@ -135,6 +149,18 @@ static char	**get_map(char *path, int *lines)
 		i++;
 	}
 	map[i] = NULL;
+	i = 0;
+	while (map[i])
+	{
+		map[i] = ft_strtrim(map[i], "\n");
+		i++;
+	}
+	// i = 0;//
+	// while (map[i])
+	// {
+	// 	printf("%s\n", map[i]);
+	// 	i++;
+	// }
 	close (fd);
 	return (map);
 }
@@ -146,7 +172,7 @@ static int	checkoccurance(char *row, char c)
 	i = 0;
 	int	len;
 
-	len = ft_strlen(row, 1);
+	len = ft_strlen(row);
 	while (i < len)
 	{
 		if (row[i] != c)
@@ -161,7 +187,7 @@ static int	check_borders(char **map, int lines)
 	int	i;
 	int	len;
 
-	len = ft_strlen(map[0], 1);
+	len = ft_strlen(map[0]);
 	i = 1;
 	if (checkoccurance(map[0], '1') == -1
 		|| checkoccurance(map[lines - 1], '1') == -1)
@@ -177,7 +203,6 @@ static int	check_borders(char **map, int lines)
 
 static int	validate_char(char c)
 {
-	// printf("")
 	if (c != WALL && c != FLOOR && c != COIN && c != PLAYER && c != EXIT)
 	{
 		printf("invalid token\n");	
@@ -186,14 +211,11 @@ static int	validate_char(char c)
 	return (0);
 }
 
-static int	check_elements(char **map, int lines)
+static int	check_elements(char **map, int lines, t_position *pos, t_elements *elem)
 {
-	int	p = 0;
-	int	c = 0;
-	int	e = 0;
 	int	i = 0;
 	int	j = 0;
-	int	len = ft_strlen(map[i], 1);
+	int	len = ft_strlen(map[i]);
 	
 	while (i < lines)
 	{
@@ -202,41 +224,94 @@ static int	check_elements(char **map, int lines)
 			if (validate_char(map[i][j]) == -1)
 				return (-1);
 			if (map[i][j] == COIN)
-				c++;
+				elem->c++;
 			if (map[i][j] == PLAYER)
-				p++;
+			{
+				elem->p++;
+				pos->x = j;
+				pos->y = i;
+			}
 			if (map[i][j] == EXIT)
-				e++;
+				elem->e++;
 			j++;		
 		}
 		j = 0;
 		i++;
 	}
-	printf("coins %d, player %d, exits %d\n", c, p, e);
-	if (p != 1 || e != 1 || c < 1)
+	printf("coins %d, player %d, exits %d\n", elem->c, elem->p, elem->e);
+	if (elem->p != 1 || elem->e != 1 ||elem->c < 1)
 		return (-1);
 	return (0);
 }
 
+static char	**make_copy(char **map, int lines)
+{
+	char	**new;
+	int		i;
+	
+	i = 0;
+	new = malloc(sizeof(char *) * (lines + 1));
+	while (map[i])
+	{
+		new[i] = ft_strdup(map[i]);
+		// printf("%s\n", new[i]);
+		i++;
+	}
+	new[i] = NULL;
+	return (new);
+}
+
+static void	check_validpath(char **map, int lines, t_position *pos, t_elements *elements)
+{
+	printf("%c\n", map[pos->x][pos->y]);
+	if (pos->x < 0 || pos->y < 0 || pos->x > lines || pos->y > ft_strlen(map[0]) || map[pos->x][pos->y] != '1')
+		return ;
+	map[pos->x][pos->y] = '1';
+	if (map[pos->x][pos->y] == COIN)
+	{
+		elements->c--;
+		map[pos->x][pos->y] = '1';
+	}
+	if (map[pos->x][pos->y] == EXIT)
+	{
+		elements->e--;
+		map[pos->x][pos->y] = '1';
+	}
+	check_validpath(map, lines, (t_position *){pos->x + 1, pos->y}, elements);
+	check_validpath(map, lines, (t_position *){pos->x - 1, pos->y}, elements);
+	check_validpath(map, lines, (t_position *){pos->x, pos->y + 1}, elements);
+	check_validpath(map, lines, (t_position *){pos->x, pos->y - 1}, elements);
+	if (elements->c != 0 || elements->e != 0)
+		exit (1);
+}
+
 static int	parse_map(char	*path)
 {
-	char	**map;
-	int		lines;
-	
+	char		**map;
+	char		**temp;
+	int			lines;
+	t_position	position;
+	t_elements	elements;
+
+	position.x = 0;
+	position.y = 0;
+	elements.c = 0;
+	elements.e = 0;
+	elements.p = 0;
 	map = get_map(path, &lines);
+
 	if (!map)
 		return (0);
+	temp = make_copy(map, lines);
+	freeer(temp);
 	if (check_size(map, lines) == -1)
 		return (freeer(map), 0);
 	if (check_borders(map, lines) == -1)
 		return (freeer(map), 0);
-	if (check_elements(map, lines) == -1)
-	{
-		printf("missing tokens\n");
+	if (check_elements(map, lines, &position, &elements) == -1)
 		return (freeer(map), 0);
-	}
-	else
-		return (freeer(map), 1);
+	check_validpath(temp, lines, &position, &elements)
+	return (freeer(map), 1);	
 }
 
 int	main(int ac, char **av)

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 09:08:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/17 16:41:12 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:17:50 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_strrchr(const char *s, int c)
 {
 	size_t		i;
 
-	i = ft_strlen(s, 0);
+	i = ft_strlen(s);
 	while ((int)i >= 0)
 	{
 		if (s[i] == (char)c)

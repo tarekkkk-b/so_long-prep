@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 10:27:47 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/17 16:40:32 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/19 12:18:27 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ size_t	ft_strlcat(char *dest, const char *src, size_t dstsize)
 	while (dest[t] != '\0')
 		t++;
 	destl = t;
-	srcl = ft_strlen(src, 0);
+	srcl = ft_strlen(src);
 	if (dstsize == 0 || dstsize <= destl)
 		return (srcl + dstsize);
 	while (src[s] != '\0' && s < dstsize - destl - 1)
