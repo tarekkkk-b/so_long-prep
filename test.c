@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:25:47 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/19 16:10:52 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/20 17:33:37 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,8 +238,8 @@ static int	check_elements(char **map, int lines, t_position *pos, t_elements *el
 		j = 0;
 		i++;
 	}
-	printf("coins %d, player %d, exits %d\n", elem->c, elem->p, elem->e);
-	if (elem->p != 1 || elem->e != 1 ||elem->c < 1)
+	// printf("coins %d, player %d, exits %d\n", elem->c, elem->p, elem->e);
+	if (elem->p != 1 || elem->e != 1 || elem->c < 1)
 		return (-1);
 	return (0);
 }
@@ -261,28 +261,22 @@ static char	**make_copy(char **map, int lines)
 	return (new);
 }
 
-static void	check_validpath(char **map, int lines, t_position *pos, t_elements *elements)
+static int	check_validpath(char **map, int lines, int x, int y, t_elements *elements)
 {
-	printf("%c\n", map[pos->x][pos->y]);
-	if (pos->x < 0 || pos->y < 0 || pos->x > lines || pos->y > ft_strlen(map[0]) || map[pos->x][pos->y] != '1')
-		return ;
-	map[pos->x][pos->y] = '1';
-	if (map[pos->x][pos->y] == COIN)
-	{
+	if (x < 0 || y < 0 || x > ft_strlen(map[0]) || y > lines || map[x][y] == '1')
+		return (-1);
+	if (map[x][y] == COIN)
 		elements->c--;
-		map[pos->x][pos->y] = '1';
-	}
-	if (map[pos->x][pos->y] == EXIT)
-	{
+	if (map[x][y] == EXIT)
 		elements->e--;
-		map[pos->x][pos->y] = '1';
-	}
-	check_validpath(map, lines, (t_position *){pos->x + 1, pos->y}, elements);
-	check_validpath(map, lines, (t_position *){pos->x - 1, pos->y}, elements);
-	check_validpath(map, lines, (t_position *){pos->x, pos->y + 1}, elements);
-	check_validpath(map, lines, (t_position *){pos->x, pos->y - 1}, elements);
+	map[x][y] = '1';
+	check_validpath(map, lines, x + 1, y, elements);
+	check_validpath(map, lines, x - 1, y, elements);
+	check_validpath(map, lines, x, y + 1, elements);
+	check_validpath(map, lines, x, y - 1, elements);
 	if (elements->c != 0 || elements->e != 0)
-		exit (1);
+		return (-1);
+	return (1);
 }
 
 static int	parse_map(char	*path)
@@ -303,14 +297,19 @@ static int	parse_map(char	*path)
 	if (!map)
 		return (0);
 	temp = make_copy(map, lines);
-	freeer(temp);
 	if (check_size(map, lines) == -1)
-		return (freeer(map), 0);
+		return (freeer(map), freeer(temp), 0);
 	if (check_borders(map, lines) == -1)
-		return (freeer(map), 0);
+		return (freeer(map), freeer(temp), 0);
 	if (check_elements(map, lines, &position, &elements) == -1)
-		return (freeer(map), 0);
-	check_validpath(temp, lines, &position, &elements)
+		return (freeer(map), freeer(temp), 0);
+	if (check_validpath(temp, lines, position.y , position.x, &elements) == -1)
+	{
+		printf("hey there loser\n");
+		return (freeer(map), freeer(temp), 0);
+	}
+	// printf("%d        %d\n", elements.c, elements.e);
+	freeer(temp);
 	return (freeer(map), 1);	
 }
 
