@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:25:47 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/20 17:33:37 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:15:54 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,13 +263,21 @@ static char	**make_copy(char **map, int lines)
 
 static int	check_validpath(char **map, int lines, int x, int y, t_elements *elements)
 {
-	if (x < 0 || y < 0 || x > ft_strlen(map[0]) || y > lines || map[x][y] == '1')
+	// int i = 0;
+	// while (map[i])
+	// {
+	// 	printf("%s\n", map[i]);
+	// 	i++;
+	// }
+	// printf("\n\n\n\n");
+	// printf("%d	%d\n", elements->c, elements->e);
+	if ((x < 0 || x > lines) || (y < 0 || y > ft_strlen(map[0])) || (map[x][y] == '1' || map[x][y] == 'V'))
 		return (-1);
 	if (map[x][y] == COIN)
 		elements->c--;
 	if (map[x][y] == EXIT)
 		elements->e--;
-	map[x][y] = '1';
+	map[x][y] = 'V';
 	check_validpath(map, lines, x + 1, y, elements);
 	check_validpath(map, lines, x - 1, y, elements);
 	check_validpath(map, lines, x, y + 1, elements);
@@ -308,7 +316,7 @@ static int	parse_map(char	*path)
 		printf("hey there loser\n");
 		return (freeer(map), freeer(temp), 0);
 	}
-	// printf("%d        %d\n", elements.c, elements.e);
+	// printf("%d	%d\n", elements.c, elements.e);
 	freeer(temp);
 	return (freeer(map), 1);	
 }
