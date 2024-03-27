@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:25:47 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/03/26 16:05:36 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/03/27 01:57:32 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ typedef struct s_elements
 	int	c;
 	int	e;
 }	t_elements;
+
+typedef enum keys
+{
+	UP = 126,
+	DOWN = 125, 
+	RIGHT = 124,
+	LEFT = 123,
+}	t_keys;
 
 
 static int	line_count(char	*path)
@@ -312,59 +320,32 @@ static void putmap(char **map)
 {
 	void	*mlx;
 	void	*mlx_win;
-	void	*img0;
-	void	*img1;
-	void	*img2;
-	void	*img3;
-	void	*img4;
-	void	*img5;
-	void	*img6;
-	char	*relative_path0 = "./xpm/sonic_left.xpm";
-	char	*relative_path1 = "./xpm/floortile4.xpm";
-	char	*relative_path2 = "./xpm/ringresized.xpm";
-	char	*relative_path3 = "./xpm/wall4.xpm";
-	char	*relative_path4 = "./xpm/waal.xpm";
-	char	*relative_path5 = "./xpm/walltilesize.xpm";
-	char	*relative_path6 = "./xpm/wall3rotated.xpm";
-	int		img_width0;
-	int		img_width1;
-	int		img_width2;
-	int		img_width3;
-	int		img_width4;
-	int		img_width5;
-	int		img_width6;
-	int		img_height0;
-	int		img_height1;
-	int		img_height2;
-	int		img_height3;
-	int		img_height4;
-	int		img_height5;
-	int		img_height6;
+	void	*img[7];
+	int	len = 120;
 
 	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 6 * TILE, 8 * TILE, "sonic");
-	img0 = mlx_xpm_file_to_image(mlx, relative_path0, &img_width0, &img_height0);
-	img1 = mlx_xpm_file_to_image(mlx, relative_path1, &img_width1, &img_height1);
-	img2 = mlx_xpm_file_to_image(mlx, relative_path2, &img_width2, &img_height2);
-	img3 = mlx_xpm_file_to_image(mlx, relative_path3, &img_width3, &img_height3);
-	img4 = mlx_xpm_file_to_image(mlx, relative_path4, &img_width4, &img_height4);
-	img5 = mlx_xpm_file_to_image(mlx, relative_path5, &img_width5, &img_height5);
-	img6 = mlx_xpm_file_to_image(mlx, relative_path6, &img_width6, &img_height6);
+	mlx_win = mlx_new_window(mlx, 10 * TILE, 6 * TILE, "sonic");
+	img[1] = mlx_xpm_file_to_image(mlx, "./xpm/sonic_left.xpm", &len, &len);
+	img[2] = mlx_xpm_file_to_image(mlx, "./xpm/floortile4.xpm", &len, &len);
+	img[3] = mlx_xpm_file_to_image(mlx, "./xpm/ringresized.xpm", &len, &len);
+	img[4] = mlx_xpm_file_to_image(mlx, "./xpm/wall4.xpm", &len, &len);
+	img[5] = mlx_xpm_file_to_image(mlx, "./xpm/waal.xpm", &len, &len);
+	img[6] = mlx_xpm_file_to_image(mlx, "./xpm/walltilesize.xpm", &len, &len);
 	int j = 0;
 	while (map[0][j])
 	{
-		mlx_put_image_to_window(mlx, mlx_win, img3, j * TILE, 0 * TILE);
-		mlx_put_image_to_window(mlx, mlx_win, img3, j * TILE, 7 * TILE);
+		mlx_put_image_to_window(mlx, mlx_win, img[4], j * TILE, 0 * TILE);
+		mlx_put_image_to_window(mlx, mlx_win, img[4], j * TILE, 5 * TILE);
 		j++;
 	}
-	int i = 1;
+	int i = 0;
 	j = 0;
-	while (i < 7)
+	while (i < 6)
 	{
 		while (map[i][j])
 		{
-			mlx_put_image_to_window(mlx, mlx_win, img3, 0 * TILE, i * TILE);
-			mlx_put_image_to_window(mlx, mlx_win, img3, 5 * TILE, i * TILE);
+			mlx_put_image_to_window(mlx, mlx_win, img[4], 0 * TILE, i * TILE);
+			mlx_put_image_to_window(mlx, mlx_win, img[4], 9 * TILE, i * TILE);
 			j++;
 		}
 		j = 0;
@@ -372,14 +353,14 @@ static void putmap(char **map)
 	}
 	i = 1;
 	j = 1;
-	while (i < 7)
+	while (i < 5)
 	{
-		while (j < 5)
+		while (j < 9)
 		{
 			if (map[i][j] == WALL)
-				mlx_put_image_to_window(mlx, mlx_win, img4, j * TILE, i * TILE);
+				mlx_put_image_to_window(mlx, mlx_win, img[5], j * TILE, i * TILE);
 			if (map[i][j] == FLOOR || map[i][j] == COIN || map[i][j] == PLAYER || map[i][j] == EXIT)
-				mlx_put_image_to_window(mlx, mlx_win, img1, j * TILE, i * TILE);
+				mlx_put_image_to_window(mlx, mlx_win, img[2], j * TILE, i * TILE);
 			j++;
 		}
 		j = 1;
@@ -387,19 +368,20 @@ static void putmap(char **map)
 	}
 	i = 1;
 	j = 1;
-	while (i < 7)
+	while (i < 6)
 	{
-		while (j < 5)
+		while (j < 10)
 		{
 			if (map[i][j] == PLAYER)
-				mlx_put_image_to_window(mlx, mlx_win, img0, j * TILE, i * TILE);
+				mlx_put_image_to_window(mlx, mlx_win, img[1], j * TILE, i * TILE);
 			if (map[i][j] == COIN || map[i][j] == EXIT)
-				mlx_put_image_to_window(mlx, mlx_win, img2, j * TILE, i * TILE);
+				mlx_put_image_to_window(mlx, mlx_win, img[3], j * TILE, i * TILE);
 			j++;
 		}
 		j = 1;
 		i++;
 	}
+	
 	mlx_loop(mlx);
 }
 
